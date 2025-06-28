@@ -48,13 +48,14 @@ all: ## output targets
 
 .PHONY: clean
 clean: ## remove files
-	-$(RM) -f ./bw ./bw.zip ./gh ./gh.zip ./ghq ./ghq.zip ./jq
+	-$(RM) -f ./bw ./bw.zip ./gh ./gh.zip ./ghq ./ghq.zip ./jq ./macports.pkg
 
 .PHONY: fetch
 fetch: fetch-bw
 fetch: fetch-gh
 fetch: fetch-ghq
 fetch: fetch-jq
+fetch: fetch-macports
 fetch: ## fetch files
 
 .PHONY: fetch-bw
@@ -81,6 +82,15 @@ fetch-jq: ## (subtarget) fetch jq
 	curl --progress-bar -fsSL -o ./jq '$(jq_release)/$(jq_executable)'
 	chmod +x ./jq
 
+.PHONY: fetch-macports
+fetch-macports: macos_version := $(shell sw_vers --productVersion | awk -F . '{ print $$1 }')
+fetch-macports: ## (subtarget) fetch MacPorts
+	@echo "Fetching MacPorts..."
+	curl --progress-bar -fsSL 'https://www.macports.org/install.php' | grep -Eo '"[^"]*\.pkg"' | sort -ruV | tr -d '"' | tee macports.txt
+	curl --progress-bar -fsSL -o ./macports.pkg "$$(grep -- '-$(macos_version)-' macports.txt)"
+	$(RM) -f macports.txt
+
+# NOTE: no checking macports.pkg
 .PHONY: test
 test: targets := ./bw ./gh ./ghq ./jq
 test: ## run tests
