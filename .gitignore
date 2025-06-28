@@ -1,0 +1,6 @@
+*
+!/.gitignore
+!/.renovaterc.json
+!/LICENSE
+!/Makefile
+!/README.md
