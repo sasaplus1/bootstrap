@@ -11,16 +11,19 @@ dest ?= $(CURDIR)
 arch := $(shell uname -m)
 
 # gh
-gh_version := $(subst v,,2.74.2)
-gh_release := https://github.com/cli/cli/releases/download/v$(gh_version)
+# renovate: datasource=github-tags depName=cli/cli
+gh_version := v2.74.2
+gh_release := https://github.com/cli/cli/releases/download/$(gh_version)
 ifeq ($(arch),arm64)
-  gh_archive := gh_$(gh_version)_macOS_arm64.zip
+  gh_archive := gh_$(subst v,,$(gh_version))_macOS_arm64.zip
 else
-  gh_archive := gh_$(gh_version)_macOS_amd64.zip
+  gh_archive := gh_$(subst v,,$(gh_version))_macOS_amd64.zip
 endif
 
 # ghq
-ghq_release := https://github.com/x-motemen/ghq/releases/download/v1.8.0
+# renovate: datasource=github-tags depName=x-motemen/ghq
+ghq_version := v1.8.0
+ghq_release := https://github.com/x-motemen/ghq/releases/download/$(ghq_version)
 ifeq ($(arch),arm64)
   ghq_archive := ghq_darwin_arm64.zip
 else
@@ -28,7 +31,9 @@ else
 endif
 
 # jq
-jq_release := https://github.com/jqlang/jq/releases/download/jq-1.8.0
+# renovate: datasource=github-tags depName=jqlang/jq
+jq_version := jq-1.8.0
+jq_release := https://github.com/jqlang/jq/releases/download/$(jq_version)
 ifeq ($(arch),arm64)
   jq_executable := jq-macos-arm64
 else
