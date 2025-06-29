@@ -90,6 +90,11 @@ fetch-macports: ## (subtarget) fetch MacPorts
 	curl --progress-bar -fsSL -o ./macports.pkg "$$(grep -- '-$(macos_version)-' macports.txt)"
 	$(RM) -f macports.txt
 
+.PHONY: install-macports
+install-macports: ## install MacPorts
+	@echo "Installing MacPorts..."
+	sudo installer -pkg ./macports.pkg -target /
+
 # NOTE: no checking macports.pkg
 .PHONY: test
 test: targets := ./bw ./gh ./ghq ./jq
