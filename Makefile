@@ -95,9 +95,9 @@ install-macports: ## install MacPorts
 	@echo "Installing MacPorts..."
 	sudo installer -pkg ./macports.pkg -target /
 
-# NOTE: no checking macports.pkg
 .PHONY: test
-test: targets := ./bw ./gh ./ghq ./jq
+test: binaries := ./bw ./gh ./ghq ./jq
 test: ## run tests
-	@printf -- '%s\n' $(targets) | xargs -n 1 bash -c '$$0 --help 2>&1 >/dev/null && echo OK "$$0" || echo NG "$$0"'
+	@printf -- '%s\n' $(binaries) | xargs -n 1 bash -c 'test -x $$0 && echo OK "$$0" || echo NG "$$0"'
+	@test -r ./macports.pkg && echo OK ./macports.pkg || echo NG ./macports.pkg
 	@echo done.
